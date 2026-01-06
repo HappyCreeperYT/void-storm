@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SET YOUR TARGET URL HERE -->
+    <meta http-equiv="refresh" content="3; url=https://discord.gg/uPK6cxruVR">
+    <title>VoidStorm Redirect</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-purple: #2d0a7d;
+            --dark-purple: #0d001a;
+            --accent-purple: #5a0ca8;
+            --light-purple: #8a2be2;
+            --void-black: #050505;
+            --crystal-blue: #3d5af1;
+            --neon-purple: #9d00ff;
+        }
+
+        body {
+            background-color: var(--void-black);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Animated Void Background */
+        #void-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: radial-gradient(ellipse at center, 
+                var(--dark-purple) 0%, 
+                var(--void-black) 60%,
+                #000000 100%);
+        }
+
+        /* Particle effects */
+        .particle-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            background: var(--neon-purple);
+            border-radius: 50%;
+            box-shadow: 0 0 3px var(--neon-purple);
+            opacity: 0;
+        }
+
+        /* Main Container */
+        .redirect-container {
+            max-width: 800px;
+            width: 90%;
+            background: rgba(13, 0, 26, 0.85);
+            border-radius: 24px;
+            padding: 50px;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            box-shadow: 
+                0 15px 50px rgba(90, 12, 168, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .redirect-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--neon-purple), transparent);
+        }
+
+        /* Logo */
+        .logo {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-shadow: 0 0 20px var(--neon-purple);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--neon-purple), transparent);
+        }
+
+        .logo i {
+            color: var(--neon-purple);
+            filter: drop-shadow(0 0 10px var(--neon-purple));
+        }
+
+        /* Title */
+        .title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #8a2be2, #9d00ff, #4361ee);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 20px rgba(157, 0, 255, 0.3);
+            background-size: 200% auto;
+            animation: gradientFlow 3s ease-in-out infinite;
+        }
+
+        @keyframes gradientFlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Spinner */
+        .spinner-container {
+            margin: 40px 0;
+            position: relative;
+        }
+
+        .spinner {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto;
+            border: 5px solid rgba(138, 43, 226, 0.2);
+            border-radius: 50%;
+            border-top-color: var(--neon-purple);
+            border-right-color: var(--crystal-blue);
+            animation: spin 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+            position: relative;
+            box-shadow: 0 0 20px rgba(157, 0, 255, 0.3);
+        }
+
+        .spinner::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: rgba(157, 0, 255, 0.5);
+            animation: spinReverse 2s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes spinReverse {
+            to { transform: rotate(-360deg); }
+        }
+
+        /* Countdown */
+        .countdown {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--neon-purple);
+            text-shadow: 0 0 15px var(--neon-purple);
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 2px;
+        }
+
+        /* Target URL Display */
+        .url-display {
+            background: rgba(5, 5, 5, 0.6);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 30px 0;
+            border: 1px solid rgba(138, 43, 226, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .url-display::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(157, 0, 255, 0.1), transparent);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            20%, 100% { left: 100%; }
+        }
+
+        .url-text {
+            font-size: 1.3rem;
+            color: #e0e0ff;
+            word-break: break-all;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Action Button */
+        .action-btn {
+            background: linear-gradient(135deg, var(--accent-purple), var(--neon-purple));
+            color: white;
+            border: none;
+            padding: 18px 45px;
+            font-size: 1.4rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(157, 0, 255, 0.4);
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            min-width: 250px;
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.2), 
+                transparent);
+            transition: left 0.6s;
+        }
+
+        .action-btn:hover::before {
+            left: 100%;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(157, 0, 255, 0.6);
+        }
+
+        .action-btn:active {
+            transform: translateY(-2px);
+        }
+
+        /* Info Text */
+        .info-text {
+            color: #aaa;
+            font-size: 1.1rem;
+            margin-top: 25px;
+            line-height: 1.6;
+        }
+
+        .warning {
+            color: #ff9a3c;
+            font-weight: 600;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(138, 43, 226, 0.2);
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .redirect-container {
+                padding: 30px 20px;
+            }
+            
+            .logo {
+                font-size: 2.5rem;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+            
+            .countdown {
+                font-size: 1.8rem;
+            }
+            
+            .url-text {
+                font-size: 1.1rem;
+            }
+            
+            .action-btn {
+                padding: 15px 30px;
+                font-size: 1.2rem;
+                min-width: auto;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 2rem;
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .title {
+                font-size: 1.6rem;
+            }
+            
+            .spinner {
+                width: 60px;
+                height: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div id="void-background"></div>
+    <div class="particle-layer" id="particleLayer"></div>
+
+    <!-- Main Content -->
+    <div class="redirect-container">
+        <div class="logo">
+            <i class="fas fa-storm"></i>
+            <span>VoidStorm</span>
+        </div>
+        
+        <h1 class="title">Redirecting...</h1>
+        
+        <div class="spinner-container">
+            <div class="spinner"></div>
+        </div>
+        
+        <div class="countdown" id="countdown">3</div>
+        
+        <p>You are being redirected to the destination</p>
+        
+        <div class="url-display">
+            <div class="url-text" id="targetUrl">VoidStorm Discord</div>
+        </div>
+        
+        <div class="warning">
+            <i class="fas fa-exclamation-triangle"></i>
+            Do not close this window
+        </div>
+        
+        <a href="https://discord.gg/uPK6cxruVR" class="action-btn" id="redirectBtn">
+            <i class="fas fa-external-link-alt"></i>
+            Redirect Now
+        </a>
+        
+        <p class="info-text">
+            If the redirect doesn't work automatically, please click the button above.<br>
+            You may need to disable any ad-blockers or pop-up blockers.
+        </p>
+        
+        <div class="footer">
+            <p>VoidStorm Redirect System • Powered by CrystalMC</p>
+        </div>
+    </div>
+
+    <script>
+        // SET YOUR TARGET URL HERE
+        const targetUrl = "https://discord.gg/uPK6cxruVR";
+        
+        // Update displayed URL
+        document.getElementById('targetUrl').textContent = targetUrl;
+        document.getElementById('redirectBtn').href = targetUrl;
+        
+        // Countdown functionality
+        let countdown = 3;
+        const countdownElement = document.getElementById('countdown');
+        
+        function updateCountdown() {
+            countdownElement.textContent = countdown;
+            if (countdown === 0) {
+                // Redirect when countdown reaches 0
+                window.location.href = targetUrl;
+            } else {
+                countdown--;
+                setTimeout(updateCountdown, 1000);
+            }
+        }
+        
+        // Start countdown
+        updateCountdown();
+        
+        // Create lightweight particles
+        function createParticles() {
+            const layer = document.getElementById('particleLayer');
+            const particleCount = 40;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                const size = Math.random() * 2 + 0.5;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.opacity = Math.random() * 0.3 + 0.1;
+                
+                const duration = Math.random() * 20 + 20;
+                const delay = Math.random() * 5;
+                particle.style.animation = `particleFloat ${duration}s ${delay}s infinite linear`;
+                
+                layer.appendChild(particle);
+            }
+            
+            // Add particle animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes particleFloat {
+                    0% {
+                        transform: translate(0, 0) rotate(0deg);
+                        opacity: ${Math.random() * 0.3 + 0.1};
+                    }
+                    100% {
+                        transform: translate(${Math.random() * 150 - 75}px, ${Math.random() * 150 - 75}px) rotate(360deg);
+                        opacity: ${Math.random() * 0.3 + 0.1};
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        // Initialize particles
+        createParticles();
+        
+        // Manual redirect button
+        document.getElementById('redirectBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            // Add loading effect to button
+            const btn = this;
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Redirecting...';
+            btn.style.pointerEvents = 'none';
+            
+            setTimeout(() => {
+                window.location.href = targetUrl;
+            }, 500);
+        });
+        
+        // Fallback redirect after 10 seconds
+        setTimeout(() => {
+            window.location.href = targetUrl;
+        }, 10000);
+    </script>
+</body>
+</html>
