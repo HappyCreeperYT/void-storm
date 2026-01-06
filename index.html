@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoidStorm | Minecraft Server</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-purple: #3a0ca3;
+            --dark-purple: #1a0033;
+            --accent-purple: #7209b7;
+            --light-purple: #9d4edd;
+            --void-black: #0a0a0a;
+            --crystal-blue: #4361ee;
+            --pixel-size: 3px;
+        }
+
+        body {
+            background-color: var(--void-black);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated void background */
+        #void-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: linear-gradient(135deg, var(--dark-purple) 0%, var(--primary-purple) 30%, var(--void-black) 100%);
+        }
+
+        .void-pixel {
+            position: absolute;
+            width: var(--pixel-size);
+            height: var(--pixel-size);
+            background-color: rgba(157, 78, 221, 0.3);
+            border-radius: 1px;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) translateX(0); opacity: 0.2; }
+            25% { transform: translateY(-20px) translateX(10px); opacity: 0.4; }
+            50% { transform: translateY(-40px) translateX(-10px); opacity: 0.6; }
+            75% { transform: translateY(-20px) translateX(5px); opacity: 0.4; }
+            100% { transform: translateY(0) translateX(0); opacity: 0.2; }
+        }
+
+        /* Navigation - Fixed and non-collapsible */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(26, 0, 51, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+            border-bottom: 2px solid var(--accent-purple);
+            transition: all 0.3s ease;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px var(--light-purple);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo i {
+            color: var(--light-purple);
+            font-size: 2rem;
+        }
+
+        .brand-tag {
+            font-size: 0.8rem;
+            background: linear-gradient(90deg, var(--crystal-blue), var(--light-purple));
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            background: rgba(114, 9, 183, 0.2);
+            border: 1px solid transparent;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.7s;
+        }
+
+        .nav-link:hover::before {
+            left: 100%;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(157, 78, 221, 0.3);
+            text-shadow: 0 0 8px var(--light-purple);
+            border-color: var(--light-purple);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(157, 78, 221, 0.4);
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        /* Main content */
+        .container {
+            padding-top: 120px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 140px 20px 50px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            margin-bottom: 40px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 4.5rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 25px;
+            background: linear-gradient(to right, #9d4edd, #f72585, #4cc9f0, #9d4edd);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 15px rgba(157, 78, 221, 0.5);
+            background-size: 200% auto;
+            animation: gradient 3s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .subtitle {
+            font-size: 1.8rem;
+            color: #ccc;
+            margin-bottom: 15px;
+            padding: 15px 30px;
+            background-color: rgba(36, 0, 70, 0.5);
+            border-radius: 15px;
+            display: inline-block;
+            border: 2px solid var(--accent-purple);
+            box-shadow: 0 0 20px rgba(114, 9, 183, 0.3);
+        }
+
+        .ip-section {
+            background: linear-gradient(135deg, rgba(36, 0, 70, 0.8), rgba(58, 12, 163, 0.8));
+            padding: 25px 40px;
+            border-radius: 20px;
+            margin: 40px 0;
+            border: 2px solid var(--accent-purple);
+            box-shadow: 0 0 30px rgba(114, 9, 183, 0.6);
+            width: 100%;
+            max-width: 800px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ip-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(157, 78, 221, 0.1) 0%, transparent 70%);
+            z-index: -1;
+        }
+
+        .ip-text {
+            font-size: 2.2rem;
+            font-family: 'Courier New', monospace;
+            margin-bottom: 20px;
+            color: #fff;
+            text-shadow: 0 0 10px var(--light-purple);
+            letter-spacing: 1px;
+        }
+
+        .copy-btn {
+            background: linear-gradient(135deg, var(--accent-purple), var(--light-purple));
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            font-size: 1.3rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 700;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin: 0 auto;
+            box-shadow: 0 8px 20px rgba(157, 78, 221, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .copy-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.7s;
+        }
+
+        .copy-btn:hover::after {
+            left: 100%;
+        }
+
+        .copy-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(157, 78, 221, 0.7);
+        }
+
+        .copy-btn:active {
+            transform: translateY(1px);
+        }
+
+        .copy-btn.copied {
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+        }
+
+        /* Buttons section */
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            margin-top: 50px;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .action-btn {
+            padding: 20px 40px;
+            font-size: 1.4rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            letter-spacing: 1px;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            min-width: 250px;
+            text-transform: uppercase;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            z-index: 1;
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.7s;
+            z-index: -1;
+        }
+
+        .action-btn:hover::before {
+            left: 100%;
+        }
+
+        .discord-btn {
+            background: linear-gradient(135deg, #5865F2, #404EED);
+            color: white;
+            border: 2px solid #7289da;
+        }
+
+        .discord-btn:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(88, 101, 242, 0.6);
+        }
+
+        .info-btn {
+            background: linear-gradient(135deg, var(--accent-purple), var(--light-purple));
+            color: white;
+            border: 2px solid var(--light-purple);
+        }
+
+        .info-btn:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(157, 78, 221, 0.6);
+        }
+
+        .other-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+            border: 2px solid #ff6b6b;
+        }
+
+        .other-btn:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(255, 107, 107, 0.6);
+        }
+
+        /* Mod List Section */
+        .mods-section {
+            margin-top: 80px;
+            width: 100%;
+            max-width: 1000px;
+            background: rgba(26, 0, 51, 0.7);
+            border-radius: 20px;
+            padding: 30px;
+            border: 2px solid var(--accent-purple);
+            box-shadow: 0 0 30px rgba(114, 9, 183, 0.4);
+        }
+
+        .mods-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            cursor: pointer;
+            padding: 15px;
+            background: rgba(58, 12, 163, 0.3);
+            border-radius: 15px;
+            transition: all 0.3s;
+        }
+
+        .mods-header:hover {
+            background: rgba(58, 12, 163, 0.5);
+        }
+
+        .mods-title {
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .mods-title i {
+            color: var(--light-purple);
+        }
+
+        .mods-count {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--light-purple), var(--crystal-blue));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .mods-toggle {
+            font-size: 1.5rem;
+            transition: transform 0.3s;
+        }
+
+        .mods-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+
+        .mods-content.expanded {
+            max-height: 500px;
+        }
+
+        .mods-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            padding: 20px;
+            background: rgba(10, 10, 10, 0.5);
+            border-radius: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .mod-item {
+            background: rgba(114, 9, 183, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(157, 78, 221, 0.3);
+            transition: all 0.3s;
+        }
+
+        .mod-item:hover {
+            background: rgba(114, 9, 183, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(157, 78, 221, 0.3);
+        }
+
+        .mod-name {
+            font-weight: 600;
+            color: #ddd;
+        }
+
+        .mod-loading {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+            color: #aaa;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 60px;
+            color: #aaa;
+            font-size: 1rem;
+            border-top: 2px solid rgba(157, 78, 221, 0.3);
+            width: 100%;
+            background: rgba(10, 10, 10, 0.8);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .crystal-logo {
+            color: var(--crystal-blue);
+            font-weight: 700;
+            font-size: 1.4rem;
+        }
+
+        .owners {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+
+        .owner {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(67, 97, 238, 0.2);
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(67, 97, 238, 0.5);
+        }
+
+        .owner i {
+            color: var(--crystal-blue);
+        }
+
+        .copyright {
+            font-size: 0.9rem;
+            color: #888;
+            margin-top: 20px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            h1 {
+                font-size: 3.5rem;
+            }
+            
+            .nav-links {
+                gap: 15px;
+            }
+            
+            .ip-text {
+                font-size: 1.8rem;
+            }
+            
+            .buttons {
+                gap: 20px;
+            }
+            
+            .action-btn {
+                min-width: 220px;
+                padding: 18px 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+            }
+            
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 80px;
+                left: 0;
+                width: 100%;
+                background-color: rgba(26, 0, 51, 0.98);
+                flex-direction: column;
+                padding: 20px;
+                transform: translateY(-100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+                border-top: 2px solid var(--accent-purple);
+            }
+            
+            .nav-links.active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+            }
+            
+            .nav-link {
+                width: 100%;
+                text-align: center;
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2.8rem;
+            }
+            
+            .subtitle {
+                font-size: 1.5rem;
+                padding: 12px 20px;
+            }
+            
+            .ip-section {
+                padding: 20px;
+            }
+            
+            .ip-text {
+                font-size: 1.5rem;
+            }
+            
+            .buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .action-btn {
+                width: 100%;
+                max-width: 350px;
+            }
+            
+            .mods-section {
+                padding: 20px;
+            }
+            
+            .mods-title {
+                font-size: 1.6rem;
+            }
+            
+            .mods-list {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2.2rem;
+                letter-spacing: 2px;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            .brand-tag {
+                font-size: 0.7rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .ip-text {
+                font-size: 1.3rem;
+            }
+            
+            .copy-btn {
+                padding: 12px 25px;
+                font-size: 1.1rem;
+            }
+            
+            .action-btn {
+                padding: 15px 25px;
+                font-size: 1.2rem;
+            }
+            
+            .mods-title {
+                font-size: 1.4rem;
+            }
+            
+            .mods-count {
+                font-size: 1.4rem;
+            }
+            
+            .mods-list {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated void background -->
+    <div id="void-background"></div>
+
+    <!-- Fixed Navigation bar -->
+    <nav class="navbar">
+        <div class="logo-container">
+            <div class="logo">
+                <i class="fas fa-storm"></i>
+                <span>VoidStorm</span>
+            </div>
+            <div class="brand-tag">CrystalMC</div>
+        </div>
+        
+        <button class="mobile-menu-toggle" id="mobileMenuToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <div class="nav-links" id="navLinks">
+            <a href="/discord" class="nav-link">Discord</a>
+            <a href="/information" class="nav-link">Information</a>
+            <a href="/other" class="nav-link">Other</a>
+        </div>
+    </nav>
+
+    <!-- Main content -->
+    <main class="container">
+        <div class="header">
+            <h1>VoidStorm</h1>
+            <div class="subtitle">VoidStorm is not released yet!</div>
+        </div>
+
+        <div class="ip-section">
+            <div class="ip-text">mc.void-storm.com</div>
+            <button class="copy-btn" id="copyBtn">
+                <i class="fas fa-copy"></i>
+                Copy IP
+            </button>
+        </div>
+
+
+
+        <!-- Mod List Section -->
+        <div class="mods-section">
+            <div class="mods-header" id="modsHeader">
+                <div class="mods-title">
+                    <i class="fas fa-cubes"></i>
+                    <span>Mod Collection</span>
+                    <span class="mods-count" id="modsCount">0</span>
+                </div>
+                <div class="mods-toggle" id="modsToggle">
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+            
+            <div class="mods-content" id="modsContent">
+                <div class="mods-list" id="modsList">
+                    <!-- Mod items will be generated by JavaScript -->
+                    <div class="mod-loading">Loading mods...</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="crystal-logo">CrystalMC</span>
+                <span>•</span>
+                <span>VoidStorm</span>
+            </div>
+            
+            <p>Void-Storm is a CrystalMC asset owned by:</p>
+            
+            <div class="owners">
+                <div class="owner">
+                    <i class="fas fa-crown"></i>
+                    <span>SCWonka</span>
+                </div>
+                <div class="owner">
+                    <i class="fas fa-crown"></i>
+                    <span>SuperBoop</span>
+                </div>
+            </div>
+            
+            <p class="copyright">
+                &copy; 2023 VoidStorm Minecraft Server. All rights reserved.<br>
+                This is a fan-made concept page. Minecraft is a trademark of Mojang AB.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Create animated void background with higher pixel density
+        function createVoidBackground() {
+            const voidBackground = document.getElementById('void-background');
+            const pixelCount = Math.floor(window.innerWidth * window.innerHeight / 400);
+            
+            for (let i = 0; i < pixelCount; i++) {
+                const pixel = document.createElement('div');
+                pixel.classList.add('void-pixel');
+                
+                // Random position
+                pixel.style.left = `${Math.random() * 100}%`;
+                pixel.style.top = `${Math.random() * 100}%`;
+                
+                // Random size
+                const size = Math.random() * 5 + 2;
+                pixel.style.width = `${size}px`;
+                pixel.style.height = `${size}px`;
+                
+                // Random opacity
+                pixel.style.opacity = Math.random() * 0.5 + 0.1;
+                
+                // Random animation delay
+                pixel.style.animationDelay = `${Math.random() * 15}s`;
+                
+                voidBackground.appendChild(pixel);
+            }
+        }
+
+        // Mobile menu toggle
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const navLinks = document.getElementById('navLinks');
+        
+        mobileMenuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            // Change icon
+            const icon = mobileMenuToggle.querySelector('i');
+            if (icon.classList.contains('fa-bars')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // Close mobile menu when clicking a link
+        const navLinkElements = document.querySelectorAll('.nav-link');
+        navLinkElements.forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileMenuToggle.querySelector('i').classList.remove('fa-times');
+                mobileMenuToggle.querySelector('i').classList.add('fa-bars');
+            });
+        });
+
+        // Copy IP button functionality
+        const copyBtn = document.getElementById('copyBtn');
+        
+        copyBtn.addEventListener('click', () => {
+            const ip = 'mc.void-storm.com';
+            
+            // Copy to clipboard
+            navigator.clipboard.writeText(ip)
+                .then(() => {
+                    // Visual feedback
+                    const originalText = copyBtn.innerHTML;
+                    copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    copyBtn.classList.add('copied');
+                    
+                    setTimeout(() => {
+                        copyBtn.innerHTML = originalText;
+                        copyBtn.classList.remove('copied');
+                    }, 2000);
+                })
+                .catch(err => {
+                    console.error('Failed to copy: ', err);
+                    alert('Failed to copy IP to clipboard. Please copy manually: ' + ip);
+                });
+        });
+
+        // Mod list functionality
+        const modsHeader = document.getElementById('modsHeader');
+        const modsToggle = document.getElementById('modsToggle');
+        const modsContent = document.getElementById('modsContent');
+        const modsList = document.getElementById('modsList');
+        const modsCount = document.getElementById('modsCount');
+        
+        let modsExpanded = false;
+        let modCount = 0;
+        const targetModCount = 500;
+        
+        // Toggle mod list
+        modsHeader.addEventListener('click', () => {
+            modsExpanded = !modsExpanded;
+            
+            if (modsExpanded) {
+                modsContent.classList.add('expanded');
+                modsToggle.style.transform = 'rotate(180deg)';
+                
+                // Generate mod list if not already generated
+                if (modCount === 0) {
+                    generateModList();
+                }
+            } else {
+                modsContent.classList.remove('expanded');
+                modsToggle.style.transform = 'rotate(0deg)';
+            }
+        });
+        
+        // Generate mod list with counting animation
+        function generateModList() {
+            modsList.innerHTML = '';
+            
+            // Animate the count
+            const countInterval = setInterval(() => {
+                modCount += 5;
+                if (modCount > targetModCount) {
+                    modCount = targetModCount;
+                    clearInterval(countInterval);
+                }
+                modsCount.textContent = modCount;
+            }, 20);
+            
+            // Generate placeholder mod items
+            setTimeout(() => {
+                for (let i = 1; i <= targetModCount; i++) {
+                    const modItem = document.createElement('div');
+                    modItem.classList.add('mod-item');
+                    
+                    const modName = document.createElement('div');
+                    modName.classList.add('mod-name');
+                    modName.textContent = `Mod ${i}`;
+                    
+                    modItem.appendChild(modName);
+                    modsList.appendChild(modItem);
+                    
+                    // Add with slight delay for visual effect
+                    if (i % 50 === 0) {
+                        setTimeout(() => {}, 10);
+                    }
+                }
+            }, 800);
+        }
+
+        // Initialize void background
+        window.addEventListener('load', createVoidBackground);
+        window.addEventListener('resize', () => {
+            // Clear and regenerate background on resize
+            const voidBackground = document.getElementById('void-background');
+            voidBackground.innerHTML = '';
+            createVoidBackground();
+        });
+
+        // Button hover effect enhancement
+        const actionButtons = document.querySelectorAll('.action-btn');
+        actionButtons.forEach(button => {
+            button.addEventListener('mouseenter', (e) => {
+                const rect = button.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                button.style.setProperty('--mouse-x', `${x}px`);
+                button.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
+        // Navbar shadow on scroll
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 10) {
+                navbar.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.9)';
+            } else {
+                navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.7)';
+            }
+        });
+    </script>
+</body>
+</html>
